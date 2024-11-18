@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hand.training.mapper.InvoiceHeaderMapper">
+    <resultMap id="invoiceHeaderMap" type="com.hand.training.entity.InvoiceHeader">
+        <!-- Primary Key Mapping -->
+        <id column="invoice_line_id" property="invoiceLineId"/>
+
+        <!-- Other Fields Mapping -->
+        <result column="invoice_header_id" property="invoiceHeaderId"/>
+        <result column="invoice_number" property="invoiceNumber"/>
+        <result column="invoice_type" property="invoiceType"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="del_flag" property="delFlag"/>
+        <result column="remark" property="remark"/>
+        <result column="creation_date" property="creationDate"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="last_update_date" property="lastUpdateDate"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <select id="getInvoiceHeaderInvoiceTYpeLikeInList" resultMap="invoiceHeaderMap">
+        select * from invoice_header as ih
+        <where>
+            <foreach collection="types" item="type" index="index"
+                     open="ih.invoice_type in (" separator=", " close=")">
+                #{type}
+            </foreach>
+        </where>
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+
+        <if test="offset != null">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <select id="getInvoiceById" parameterType="Long" resultMap="invoiceHeaderMap">
+        select * from invoice_header as ih
+        where ih.invoice_header_id = #{ihId};
+    </select>
+
+    <update id="updateDlFlag">
+        UPDATE invoice_header
+        SET del_flag = 1
+        WHERE invoice_header_id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectDlFlag">
+        select ih.dl_flag from invoice_header as ih where #{id}
+    </select>
+
+
+    <insert id="insertInvoiceHeader" parameterType="com.hand.training.entity.InvoiceHeader">
+        insert into invoice_header(invoice_number, status, invoice_type
+                    ,total_amount, del_flag, remark)
+        values (#{invoiceNumber}, #{status}, #{invoiceType},
+                #{totalAmount}, #{delFlag}, #{remark});
+    </insert>
+
+    <insert id="insertOrUpdateInvoiceHeader" parameterType="com.hand.training.entity.InvoiceHeader"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO invoice_header (invoice_number, status, invoice_type, total_amount, del_flag, remark)
+        VALUES (#{invoiceNumber}, #{status}, #{invoiceType}, #{totalAmount}, #{delFlag}, #{remark})
+            ON DUPLICATE KEY UPDATE
+            status = VALUES(status),
+            invoice_type = VALUES(invoiceType),
+            total_amount = VALUES(totalAmount),
+            del_flag = VALUES(delFlag),
+            remark = VALUES(remark);
+    </insert>
+
+
+    <update id="updateInvoiceHeader" parameterType="com.hand.training.entity.InvoiceHeader">
+        UPDATE invoice_header
+        SET
+            invoice_number = #{invoiceNumber},
+            status = #{status},
+            invoice_type = #{invoiceType},
+            total_amount = #{totalAmount},
+            remark = #{remark},
+            last_update_date = #{lastUpdateDate}
+        WHERE invoice_header_id = #{invoiceHeaderId};
+    </update>
+
+    <select id="getHeaderForReturn" resultMap="invoiceHeaderMap" parameterType="com.hand.training.entity.InvoiceHeader">
+        SELECT *
+        FROM invoice_header AS ih
+        WHERE ih.invoice_number = #{invoiceNumber}
+        AND ih.status = #{status}
+        AND ih.invoice_type = #{invoiceType}
+        AND ih.total_amount = #{totalAmount}
+        AND ih.remark = #{remark}
+        ORDER BY ih.last_update_date DESC
+        LIMIT 1;
+    </select>
+
+    <update id="updateAmount">
+        update invoice_header
+        set total_amount = #{totalAmount}
+        where invoice_header_id = #{id}
+    </update>
+
+    <select id="getTotalAmount" resultType="Double">
+        select total_amount from invoice_header as ih
+        where invoice_header_id = #{invoiceHeaderId};
+    </select>
+</mapper>

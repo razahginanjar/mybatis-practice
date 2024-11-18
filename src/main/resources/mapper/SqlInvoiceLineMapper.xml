@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hand.training.mapper.InvoiceLineMapper">
+    <resultMap id="invoiceLineMap" type="com.hand.training.entity.InvoiceLine">
+        <!-- Primary Key Mapping -->
+        <id column="invoice_line_id" property="invoiceLineId"/>
+
+        <!-- Other Fields Mapping -->
+        <result column="invoice_header_id" property="invoiceHeaderId"/>
+        <result column="item_number" property="itemNumber"/>
+        <result column="item_description" property="itemDescription"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="quantity" property="quantity"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="remark" property="remark"/>
+        <result column="creation_date" property="creationDate"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="last_updated_by" property="lastUpdatedBy"/>
+        <result column="last_update_date" property="lastUpdateDate"/>
+    </resultMap>
+
+    <select id="getInvoiceLineQuantityLikeInList" resultMap="invoiceLineMap">
+        select * from invoice_line as il
+        <where>
+            <foreach collection="list" item="quantities" index="index" open="il.quantity in (" separator=", " close=")">
+                #{quantities}
+            </foreach>
+        </where>
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+
+        <if test="offset != null">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <select id="getLineFromHeaderId" resultMap="invoiceLineMap">
+        select * from invoice_line as il
+        where il.invoice_header_id = #{id};
+    </select>
+
+    <delete id="deleteByHeaderId">
+        DELETE FROM invoice_line AS il
+        WHERE il.invoice_header_id IN
+        <foreach collection="idHeaderList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertingInvoiceLine" parameterType="com.hand.training.entity.InvoiceLine">
+        insert into invoice_line(invoice_header_id, item_number, item_description
+                                , unit_price, quantity, total_amount, remark)
+        values (#{invoiceHeaderId}, #{itemNumber}, #{itemDescription}, #{unitPrice},
+                #{quantity}, #{totalAmount}, #{remark})
+    </insert>
+    <select id="getLinesForReturn" parameterType="com.hand.training.entity.InvoiceLine">
+        select * from invoice_line
+        where invoice_header_id = #{invoiceHeaderId} and  item_number = #{itemNumber}
+          and item_description = #{itemDescription} and
+        unit_price = #{unitPrice} and quantity = #{quantity} and  total_amount = #{totalAmount} and remark = #{remark};
+    </select>
+    <update id="updateLine" parameterType="com.hand.training.entity.InvoiceLine">
+        update invoice_line
+        set invoice_header_id = #{invoiceHeaderId}, item_number = #{itemNumber}
+            , item_description = #{itemDescription} ,
+            unit_price = #{unitPrice}, quantity = #{quantity}
+            , total_amount = #{totalAmount}, remark = #{remark}
+            , last_update_date = #{lastUpdateDate}
+        where invoice_line_id = #{invoiceLineId};
+    </update>
+
+    <select id="getByIdLine" resultMap="invoiceLineMap">
+        select * from invoice_line
+        where invoice_line_id = #{invoiceLineId};
+    </select>
+
+</mapper>

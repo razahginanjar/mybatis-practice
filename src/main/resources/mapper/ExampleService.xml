@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hand.training.mapper.ExampleMapper">
+<!--    <resultMap id="invoiceLineMap" type="com.hand.training.entity.InvoiceHine">-->
+<!--        &lt;!&ndash; Primary Key Mapping &ndash;&gt;-->
+<!--        <id column="invoice_line_id" property="invoiceLineId"/>-->
+
+<!--        &lt;!&ndash; Other Fields Mapping &ndash;&gt;-->
+<!--        <result column="invoice_header_id" property="invoiceHeaderId"/>-->
+<!--        <result column="invoice_number" property="invoiceNumber"/>-->
+<!--        <result column="invoice_type" property="invoiceType"/>-->
+<!--        <result column="total_amount" property="totalAmount"/>-->
+<!--        <result column="del_flag" property="delFlag"/>-->
+<!--        <result column="remark" property="remark"/>-->
+<!--        <result column="creation_date" property="creationDate"/>-->
+<!--        <result column="created_by" property="createdBy"/>-->
+<!--        <result column="last_updated_by" property="lastUpdatedBy"/>-->
+<!--        <result column="last_update_date" property="lastUpdateDate"/>-->
+<!--        <result column="status" property="status"/>-->
+<!--    </resultMap>-->
+
+<!--    <resultMap id="invoiceLineMap" type="com.hand.training.entity.InvoiceLine">-->
+<!--        &lt;!&ndash; Primary Key Mapping &ndash;&gt;-->
+<!--        <id column="invoice_line_id" property="invoiceLineId"/>-->
+
+<!--        &lt;!&ndash; Other Fields Mapping &ndash;&gt;-->
+<!--        <result column="invoice_header_id" property="invoiceHeaderId"/>-->
+<!--        <result column="item_number" property="itemNumber"/>-->
+<!--        <result column="item_description" property="itemDescription"/>-->
+<!--        <result column="unit_price" property="unitPrice"/>-->
+<!--        <result column="quantity" property="quantity"/>-->
+<!--        <result column="total_amount" property="totalAmount"/>-->
+<!--        <result column="remark" property="remark"/>-->
+<!--        <result column="creation_date" property="creationDate"/>-->
+<!--        <result column="created_by" property="createdBy"/>-->
+<!--        <result column="last_updated_by" property="lastUpdatedBy"/>-->
+<!--        <result column="last_update_date" property="lastUpdateDate"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="getInvoiceLineQuantityLikeInList" resultMap="invoiceLineMap">-->
+<!--        select * from invoice_line as il-->
+<!--        <where>-->
+<!--            <foreach collection="list" item="quantities" index="index" open="il.quantity in (" separator=", " close=")">-->
+<!--                #{quantities}-->
+<!--            </foreach>-->
+<!--        </where>-->
+<!--        <if test="limit != null">-->
+<!--            LIMIT #{limit}-->
+<!--        </if>-->
+
+<!--        <if test="offset != null">-->
+<!--            OFFSET #{offset}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    <select id="getInvoiceHeaderInvoiceTYpeLikeInList" resultMap="invoiceHeaderMap">-->
+<!--        select * from invoice_header as ih-->
+<!--        <where>-->
+<!--            <foreach collection="list" item="types" index="index"-->
+<!--                     open="il.invoice_type in (" separator=", " close=")">-->
+<!--                #{types}-->
+<!--            </foreach>-->
+<!--        </where>-->
+<!--        <if test="limit != null">-->
+<!--            LIMIT #{limit}-->
+<!--        </if>-->
+
+<!--        <if test="offset != null">-->
+<!--            OFFSET #{offset}-->
+<!--        </if>-->
+<!--    </select>-->
+
+</mapper>
